@@ -1,47 +1,76 @@
-﻿
-# Selenium ve ChromeDriver ayarları (Ubuntu uyumlu)
+﻿"""
+Google Maps Scraper - Standalone Script
+Komut satırından çalıştırılabilir versiyon.
+Sunucu için optimize edilmiştir.
+"""
+
+import os
+import json
+import csv
+import time
+
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service  # ChromeDriver servisi için
-import time
-import json
-import csv
+from selenium.webdriver.chrome.service import Service
+
+
+def get_chrome_driver():
+    """
+    Chrome WebDriver oluşturur.
+    Sunucu (Linux) ve yerel (Windows) ortamlar için uyumludur.
+    """
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--start-maximized")
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--lang=tr-TR")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    chrome_options.add_argument("--remote-debugging-port=9222")
+    
+    # Linux sunucu için ChromeDriver yolu
+    linux_chromedriver_path = '/usr/bin/chromedriver'
+    
+    if os.path.exists(linux_chromedriver_path):
+        # Linux sunucu
+        service = Service(linux_chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+    else:
+        # Windows veya webdriver-manager kullan
+        try:
+            from webdriver_manager.chrome import ChromeDriverManager
+            service = Service(ChromeDriverManager().install())
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+        except Exception:
+            # Sistem PATH'inden Chrome kullan
+            driver = webdriver.Chrome(options=chrome_options)
+    
+    return driver
+
 
 def scrape_google_maps(url):
     """
-    Google Maps'ten berber verilerini çeker.
-    Ubuntu sunucuda Chrome ve ChromeDriver'ın sistemde kurulu olduğu varsayılır.
-    Headless mod ve stabil çalışma için ek argümanlar eklenmiştir.
+    Google Maps'ten işletme verilerini çeker.
+    
+    Args:
+        url: Google Maps arama URL'si
+        
+    Returns:
+        list: İşletme bilgileri listesi
     """
-    # Chrome ayarları
-    chrome_options = Options()
-    chrome_options.add_argument("--start-maximized")
-    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-    chrome_options.add_argument("--lang=tr-TR")
-
-    # Headless ve sunucu uyumlu argümanlar (Linux için tam set)
-    chrome_options.add_argument('--headless=new')
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument('--disable-gpu')
-    chrome_options.add_argument('--remote-debugging-port=9222')
-
-    # ChromeDriver'ın sistemde kurulu olduğu doğru yol
-    chrome_service = Service('/usr/bin/chromedriver')
-
-    # Webdriver başlatılır
-    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
-
+    driver = None
+    
     try:
+        driver = get_chrome_driver()
         print("Google Maps açılıyor...")
         driver.get(url)
-
-        # Sayfanın yüklenmesini bekle
         time.sleep(5)
-
+        
         # Çerez popup'ını kabul et (varsa)
         try:
             accept_button = WebDriverWait(driver, 5).until(
@@ -51,7 +80,7 @@ def scrape_google_maps(url):
             time.sleep(2)
         except Exception:
             print("Çerez popup'ı bulunamadı veya zaten kabul edilmiş.")
-
+        
         # Sonuçların yüklenmesini bekle
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div[role='feed']"))
@@ -63,7 +92,7 @@ def scrape_google_maps(url):
         
         last_height = 0
         scroll_count = 0
-        max_scrolls = 20  # Maksimum scroll sayısı
+        max_scrolls = 20
         
         while scroll_count < max_scrolls:
             driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", scrollable_div)
@@ -71,12 +100,11 @@ def scrape_google_maps(url):
             
             new_height = driver.execute_script("return arguments[0].scrollHeight", scrollable_div)
             if new_height == last_height:
-                # Listenin sonuna ulaşıldı mı kontrol et
                 try:
-                    end_message = driver.find_element(By.XPATH, "//*[contains(text(), 'listenin sonuna ulaştınız')]")
+                    driver.find_element(By.XPATH, "//*[contains(text(), 'listenin sonuna ulaştınız')]")
                     print("Listenin sonuna ulaşıldı.")
                     break
-                except:
+                except Exception:
                     pass
             
             last_height = new_height
@@ -87,7 +115,7 @@ def scrape_google_maps(url):
         time.sleep(2)
         places = driver.find_elements(By.CSS_SELECTOR, "div.Nv2PK")
         
-        print(f"\n{len(places)} berber bulundu!\n")
+        print(f"\n{len(places)} işletme bulundu!\n")
         
         results = []
         
@@ -98,7 +126,7 @@ def scrape_google_maps(url):
                 try:
                     name_element = place.find_element(By.CSS_SELECTOR, "div.qBF1Pd")
                     name = name_element.text
-                except:
+                except Exception:
                     pass
                 
                 # Puan
@@ -106,7 +134,7 @@ def scrape_google_maps(url):
                 try:
                     rating_element = place.find_element(By.CSS_SELECTOR, "span.MW4etd")
                     rating = rating_element.text
-                except:
+                except Exception:
                     pass
                 
                 # Değerlendirme sayısı
@@ -114,7 +142,7 @@ def scrape_google_maps(url):
                 try:
                     reviews_element = place.find_element(By.CSS_SELECTOR, "span.UY7F9")
                     reviews = reviews_element.text.replace("(", "").replace(")", "")
-                except:
+                except Exception:
                     pass
                 
                 # Kategori/Tür
@@ -126,7 +154,7 @@ def scrape_google_maps(url):
                         if text and "·" not in text and not text.startswith("("):
                             category = text
                             break
-                except:
+                except Exception:
                     pass
                 
                 # Adres
@@ -135,10 +163,10 @@ def scrape_google_maps(url):
                     address_elements = place.find_elements(By.CSS_SELECTOR, "div.W4Efsd")
                     for elem in address_elements:
                         text = elem.text
-                        if "Maltepe" in text or "İstanbul" in text or any(char.isdigit() for char in text):
+                        if "İstanbul" in text or any(char.isdigit() for char in text):
                             address = text.split("·")[-1].strip() if "·" in text else text
                             break
-                except:
+                except Exception:
                     pass
                 
                 # Çalışma saatleri
@@ -146,7 +174,7 @@ def scrape_google_maps(url):
                 try:
                     hours_element = place.find_element(By.CSS_SELECTOR, "span.ZDu9vd span")
                     hours = hours_element.text
-                except:
+                except Exception:
                     pass
                 
                 # Link
@@ -154,10 +182,10 @@ def scrape_google_maps(url):
                 try:
                     link_element = place.find_element(By.CSS_SELECTOR, "a.hfpxzc")
                     link = link_element.get_attribute("href")
-                except:
+                except Exception:
                     pass
                 
-                if name:  # Sadece ismi olan kayıtları ekle
+                if name:
                     result = {
                         "sira": i,
                         "isim": name,
@@ -182,33 +210,43 @@ def scrape_google_maps(url):
         return []
         
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
+
 
 def save_to_json(data, filename="berberler.json"):
-    """Verileri JSON dosyasına kaydet"""
-    with open(filename, "w", encoding="utf-8") as f:
+    """Verileri JSON dosyasına kaydet."""
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(base_dir, filename)
+    
+    with open(filepath, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     print(f"\nVeriler {filename} dosyasına kaydedildi.")
 
+
 def save_to_csv(data, filename="berberler.csv"):
-    """Verileri CSV dosyasına kaydet"""
+    """Verileri CSV dosyasına kaydet."""
     if not data:
         print("Kaydedilecek veri yok!")
         return
     
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(base_dir, filename)
+    
     keys = data[0].keys()
-    with open(filename, "w", newline="", encoding="utf-8-sig") as f:
+    with open(filepath, "w", newline="", encoding="utf-8-sig") as f:
         writer = csv.DictWriter(f, fieldnames=keys)
         writer.writeheader()
         writer.writerows(data)
     print(f"Veriler {filename} dosyasına kaydedildi.")
 
+
 if __name__ == "__main__":
-    # Google Maps URL
-    url = "https://www.google.com/maps/search/Maltepe+berberler/@40.9440895,29.1142176,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI2MDEwNC4wIKXMDSoASAFQAw%3D%3D"
+    # Örnek Google Maps URL
+    url = "https://www.google.com/maps/search/Maltepe+berberler/"
     
     print("=" * 60)
-    print("MALTEPE BERBERLER - GOOGLE MAPS VERİ ÇEKME")
+    print("GOOGLE MAPS VERİ ÇEKME")
     print("=" * 60)
     
     # Verileri çek
@@ -216,7 +254,7 @@ if __name__ == "__main__":
     
     if data:
         print(f"\n{'=' * 60}")
-        print(f"TOPLAM {len(data)} BERBER BULUNDU")
+        print(f"TOPLAM {len(data)} İŞLETME BULUNDU")
         print("=" * 60)
         
         # JSON ve CSV olarak kaydet

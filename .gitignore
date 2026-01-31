@@ -1,9 +1,67 @@
-.venv/
+# Git Ignore - Google Maps Scraper
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.venv/
+ENV/
+env/
+
+# Environment Variables (Sunucuda oluşturulacak)
 .env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
 *.sqlite3
 *.db
-.DS_Store
-.idea/
-.vscode/
+
+# Logs
+*.log
+logs/
+
+# Selenium / Chrome
+chromedriver
+chromedriver.exe
+*.whl
+
+# JSON sonuç dosyaları
+sonuclar_*.json
+son_arama.json
+
+# CSV ve Excel sonuçları
+*.csv
+*.xlsx
+
+# Webdriver Manager cache
+.wdm/

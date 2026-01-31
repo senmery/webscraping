@@ -1,5 +1,16 @@
-flask
-selenium
-openpyxl
+# Google Maps Scraper - Requirements
+# Production için gerekli Python paketleri
 
-python-dotenv
+# Web Framework
+flask>=2.0.0
+gunicorn>=21.0.0
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# Web Scraping
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+
+# Excel Export
+openpyxl>=3.1.0

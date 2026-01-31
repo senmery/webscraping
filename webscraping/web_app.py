@@ -1,4 +1,9 @@
-﻿import os
+﻿"""
+Google Maps Scraper - Production Ready Flask App
+Sunucu için optimize edilmiş web uygulaması
+"""
+
+import os
 import re
 import json
 import time
@@ -7,7 +12,13 @@ from io import BytesIO, StringIO
 import csv
 
 from flask import Flask, jsonify, request, render_template_string, send_file, Response
-from dotenv import load_dotenv
+
+# .env desteği (isteğe bağlı)
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
 
 # Selenium Importları
 from selenium import webdriver
@@ -16,20 +27,21 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
 
 # Excel Importları
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+try:
+    import openpyxl
+    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    EXCEL_AVAILABLE = True
+except ImportError:
+    EXCEL_AVAILABLE = False
 
-# .env yükle
-load_dotenv()
-
+# Flask Uygulaması
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'google_maps_scraper_2026')
+application = app  # WSGI sunucuları (Gunicorn) için alias
 
 # --- GLOBAL DEĞİŞKENLER ---
-# İşlem durumunu takip etmek için global sözlük
 scraping_status = {
     'is_running': False,
     'progress': 0,
@@ -40,7 +52,42 @@ scraping_status = {
     'profession': ''
 }
 
+
 # --- YARDIMCI FONKSİYONLAR ---
+
+def get_chrome_driver():
+    """
+    Chrome WebDriver oluşturur.
+    Sunucu (Linux) ve yerel (Windows) ortamlar için uyumludur.
+    """
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--lang=tr-TR")
+    chrome_options.add_argument("--disable-blink-features=AutomationControlled")
+    
+    # Linux sunucu için ChromeDriver yolu
+    linux_chromedriver_path = '/usr/bin/chromedriver'
+    
+    if os.path.exists(linux_chromedriver_path):
+        # Linux sunucu
+        service = Service(linux_chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+    else:
+        # Windows veya webdriver-manager kullan
+        try:
+            from webdriver_manager.chrome import ChromeDriverManager
+            service = Service(ChromeDriverManager().install())
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+        except Exception:
+            # Sistem PATH'inden Chrome kullan
+            driver = webdriver.Chrome(options=chrome_options)
+    
+    return driver
+
 
 def analyze_phone_number(phone):
     """Telefon numarasını analiz eder ve WhatsApp linki oluşturur."""
@@ -74,6 +121,7 @@ def analyze_phone_number(phone):
         'display': phone
     }
 
+
 def extract_detailed_data(driver, index, link):
     """Tekil işletme detaylarını çeker."""
     result = {
@@ -93,54 +141,57 @@ def extract_detailed_data(driver, index, link):
     }
     
     try:
-        # Başlık bekle
         WebDriverWait(driver, 5).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "h1, div.fontHeadlineLarge"))
         )
-        time.sleep(1) # Kısa bekleme
+        time.sleep(1)
         
         # İsim
         try:
             name_elem = driver.find_element(By.TAG_NAME, "h1")
             result['isim'] = name_elem.text.strip()
-        except:
+        except Exception:
             pass
 
-        # Puan ve Değerlendirme
+        # Puan
         try:
             puan_elem = driver.find_element(By.CSS_SELECTOR, "div.F7nice span[aria-hidden='true']")
             result['puan'] = puan_elem.text.strip()
-        except:
+        except Exception:
             pass
 
+        # Değerlendirme sayısı
         try:
             yorum_elem = driver.find_element(By.CSS_SELECTOR, "div.F7nice span[aria-label*='yorum']")
             text = yorum_elem.get_attribute("aria-label")
-            result['degerlendirme_sayisi'] = re.search(r'([\d.,]+)', text).group(1) if text else ''
-        except:
+            match = re.search(r'([\d.,]+)', text) if text else None
+            result['degerlendirme_sayisi'] = match.group(1) if match else ''
+        except Exception:
             pass
 
-        # Adres (Buton aria-label üzerinden)
+        # Adres
         try:
             addr_btn = driver.find_element(By.CSS_SELECTOR, "button[data-item-id='address']")
-            result['adres'] = addr_btn.get_attribute("aria-label").replace("Adres:", "").strip()
-        except:
+            label = addr_btn.get_attribute("aria-label")
+            result['adres'] = label.replace("Adres:", "").strip() if label else ''
+        except Exception:
             pass
 
         # Telefon
         try:
             phone_btn = driver.find_element(By.CSS_SELECTOR, "button[data-item-id^='phone']")
-            raw_phone = phone_btn.get_attribute("aria-label").replace("Telefon:", "").strip()
+            label = phone_btn.get_attribute("aria-label")
+            raw_phone = label.replace("Telefon:", "").strip() if label else ''
             result['telefon'] = raw_phone
             result['telefon_bilgi'] = analyze_phone_number(raw_phone)
-        except:
+        except Exception:
             pass
 
         # Website
         try:
             web_btn = driver.find_element(By.CSS_SELECTOR, "a[data-item-id='authority']")
             result['website'] = web_btn.get_attribute("href")
-        except:
+        except Exception:
             pass
 
         return result
@@ -148,6 +199,7 @@ def extract_detailed_data(driver, index, link):
     except Exception as e:
         print(f"Veri çekme hatası (Index {index}): {e}")
         return result
+
 
 def scrape_task(location, profession, max_results):
     """Arka planda çalışacak ana scraping fonksiyonu."""
@@ -160,18 +212,7 @@ def scrape_task(location, profession, max_results):
     
     driver = None
     try:
-        # Chrome Ayarları
-        chrome_options = Options()
-        chrome_options.add_argument("--headless=new") # Arka planda çalışması için
-        chrome_options.add_argument("--window-size=1920,1080")
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--lang=tr-TR")
-        
-        # Driver Manager ile başlatma
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
-        
+        driver = get_chrome_driver()
         scraping_status['message'] = 'Google Maps açılıyor...'
         
         search_query = f"{location} {profession}"
@@ -185,17 +226,17 @@ def scrape_task(location, profession, max_results):
             WebDriverWait(driver, 3).until(
                 EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Kabul')]"))
             ).click()
-        except:
+        except Exception:
             pass
             
         scraping_status['message'] = 'Liste yükleniyor...'
         
-        # Listeyi bekle ve scroll et
+        # Listeyi bekle
         try:
             WebDriverWait(driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, "div[role='feed']"))
             )
-        except:
+        except Exception:
             scraping_status['message'] = 'Sonuç bulunamadı.'
             scraping_status['is_running'] = False
             return
@@ -204,8 +245,10 @@ def scrape_task(location, profession, max_results):
         place_links = []
         
         # Link toplama döngüsü
-        while len(place_links) < max_results:
-            # Mevcut linkleri al (a.hfpxzc Google Maps işletme linki sınıfıdır)
+        scroll_attempts = 0
+        max_scroll_attempts = 30
+        
+        while len(place_links) < max_results and scroll_attempts < max_scroll_attempts:
             elements = driver.find_elements(By.CSS_SELECTOR, "a.hfpxzc")
             for elem in elements:
                 href = elem.get_attribute("href")
@@ -214,15 +257,14 @@ def scrape_task(location, profession, max_results):
             
             scraping_status['message'] = f"{len(place_links)} işletme bulundu..."
             
-            # Scroll aşağı
             driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", scrollable_div)
             time.sleep(2)
             
-            # Eğer sayfa sonuna geldiyse veya yeterli sayıya ulaştıysa çık
             if "sonuna" in driver.page_source or len(place_links) >= max_results:
                 break
+            
+            scroll_attempts += 1
         
-        # Link sayısını limitle
         place_links = place_links[:max_results]
         
         # Detayları çekme döngüsü
@@ -230,7 +272,7 @@ def scrape_task(location, profession, max_results):
         total = len(place_links)
         
         for i, link in enumerate(place_links):
-            if not scraping_status['is_running']: # Durdurma kontrolü
+            if not scraping_status['is_running']:
                 break
                 
             scraping_status['message'] = f"Veri çekiliyor: {i+1}/{total}"
@@ -241,12 +283,15 @@ def scrape_task(location, profession, max_results):
             
             if data['isim']:
                 results.append(data)
-                scraping_status['results'] = results # Canlı güncelleme
+                scraping_status['results'] = results.copy()
                 
         scraping_status['message'] = 'Tamamlandı!'
         scraping_status['progress'] = 100
         scraping_status['results'] = results
         scraping_status['total_found'] = len(results)
+        
+        # Sonuçları JSON dosyasına kaydet
+        save_results(results, location, profession)
 
     except Exception as e:
         scraping_status['message'] = f"Hata oluştu: {str(e)}"
@@ -255,13 +300,37 @@ def scrape_task(location, profession, max_results):
         if driver:
             driver.quit()
 
-# --- FLASK ROUTE'LARI ---
 
-# Basit bir HTML arayüzü (template dosyası oluşturmanıza gerek kalmasın diye)
+def save_results(results, location, profession):
+    """Sonuçları JSON dosyasına kaydet."""
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        filename = f"sonuclar_{location}_{profession}.json".replace(' ', '_').lower()
+        filepath = os.path.join(base_dir, filename)
+        
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(results, f, ensure_ascii=False, indent=2)
+        
+        # Genel sonuçlar dosyası
+        general_filepath = os.path.join(base_dir, 'son_arama.json')
+        with open(general_filepath, 'w', encoding='utf-8') as f:
+            json.dump({
+                'lokasyon': location,
+                'meslek': profession,
+                'sonuc_sayisi': len(results),
+                'sonuclar': results
+            }, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Sonuçlar kaydedilirken hata: {e}")
+
+
+# --- HTML TEMPLATE ---
 HTML_TEMPLATE = """
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Google Maps Scraper</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -270,22 +339,22 @@ HTML_TEMPLATE = """
     <div class="container mt-5">
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
-                <h3>🗺️ Google Maps Scraper 2026</h3>
+                <h3>🗺️ Google Maps Scraper</h3>
             </div>
             <div class="card-body">
                 <form id="searchForm">
-                    <div class="row">
+                    <div class="row g-3">
                         <div class="col-md-5">
                             <input type="text" class="form-control" name="location" placeholder="Konum (Örn: Kadıköy)" required>
                         </div>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" name="profession" placeholder="Meslek (Örn: Diş Hekimi)" required>
+                            <input type="text" class="form-control" name="profession" placeholder="Meslek (Örn: Berber)" required>
                         </div>
                         <div class="col-md-2">
                             <input type="number" class="form-control" name="max_results" value="10" min="1" max="100">
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-success mt-3 w-100">Scraping Başlat</button>
+                    <button type="submit" class="btn btn-success mt-3 w-100">🚀 Scraping Başlat</button>
                 </form>
 
                 <div id="statusArea" class="mt-4" style="display:none;">
@@ -294,13 +363,16 @@ HTML_TEMPLATE = """
                         <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
                     </div>
                     <div class="mt-3">
-                        <a href="/export/excel" id="dlExcel" class="btn btn-primary disabled">Excel İndir</a>
-                        <a href="/export/csv" id="dlCsv" class="btn btn-secondary disabled">CSV İndir</a>
+                        <a href="/export/excel" id="dlExcel" class="btn btn-primary disabled">📊 Excel İndir</a>
+                        <a href="/export/csv" id="dlCsv" class="btn btn-secondary disabled">📄 CSV İndir</a>
                     </div>
                     <div class="mt-3 alert alert-info">
-                        Bulunan İşletme Sayısı: <span id="foundCount">0</span>
+                        Bulunan İşletme Sayısı: <strong><span id="foundCount">0</span></strong>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-muted text-center">
+                Google Maps Scraper &copy; 2026
             </div>
         </div>
     </div>
@@ -309,11 +381,13 @@ HTML_TEMPLATE = """
         $(document).ready(function(){
             $('#searchForm').on('submit', function(e){
                 e.preventDefault();
+                $('#dlExcel').addClass('disabled');
+                $('#dlCsv').addClass('disabled');
                 $.post('/search', $(this).serialize(), function(data){
                     $('#statusArea').show();
                     checkStatus();
                 }).fail(function(xhr){
-                    alert(xhr.responseJSON.error);
+                    alert(xhr.responseJSON ? xhr.responseJSON.error : 'Bir hata oluştu');
                 });
             });
 
@@ -337,59 +411,83 @@ HTML_TEMPLATE = """
 </html>
 """
 
+
+# --- FLASK ROUTE'LARI ---
+
 @app.route('/')
 def home():
+    """Ana sayfa."""
     return render_template_string(HTML_TEMPLATE)
+
+
+@app.route('/api')
+def api_home():
+    """API durumu."""
+    return jsonify({
+        "status": "ok",
+        "message": "Google Maps Scraper API çalışıyor 👑",
+        "endpoints": ["/", "/search", "/status", "/export/excel", "/export/csv"]
+    })
+
 
 @app.route('/search', methods=['POST'])
 def search():
+    """Arama başlat."""
     global scraping_status
     
     if scraping_status['is_running']:
         return jsonify({'error': 'Şu anda zaten bir işlem devam ediyor.'}), 400
     
-    location = request.form.get('location')
-    profession = request.form.get('profession')
+    location = request.form.get('location', '').strip()
+    profession = request.form.get('profession', '').strip()
     max_results = int(request.form.get('max_results', 20))
+    
+    if not location or not profession:
+        return jsonify({'error': 'Lokasyon ve meslek alanları zorunludur!'}), 400
     
     scraping_status['location'] = location
     scraping_status['profession'] = profession
     
-    # Arka planda thread başlat
     thread = threading.Thread(target=scrape_task, args=(location, profession, max_results))
     thread.daemon = True
     thread.start()
     
     return jsonify({'success': True, 'message': 'İşlem başlatıldı'})
 
+
 @app.route('/status')
 def status():
+    """Scraping durumunu döndür."""
     return jsonify(scraping_status)
+
 
 @app.route('/export/<fmt>')
 def export_data(fmt):
+    """Excel veya CSV olarak dışa aktar."""
     global scraping_status
     results = scraping_status.get('results', [])
     
     if not results:
-        return "İndirilecek veri yok", 404
+        return jsonify({"error": "İndirilecek veri yok"}), 404
         
-    filename_base = f"sonuclar_{scraping_status['location']}_{scraping_status['profession']}"
+    location = scraping_status.get('location', 'bilinmiyor')
+    profession = scraping_status.get('profession', 'bilinmiyor')
+    filename_base = f"sonuclar_{location}_{profession}".replace(' ', '_')
     
     if fmt == 'excel':
-        # Excel Oluşturma
+        if not EXCEL_AVAILABLE:
+            return jsonify({"error": "openpyxl kütüphanesi yüklü değil. CSV olarak indirin."}), 400
+            
         wb = openpyxl.Workbook()
         ws = wb.active
         ws.title = "Sonuclar"
         
-        headers = ['Sıra', 'İşletme Adı', 'Puan', 'Yorum Sayısı', 'Adres', 'Telefon', 'Tip', 'WhatsApp', 'Website']
+        headers = ['Sıra', 'İşletme Adı', 'Puan', 'Yorum Sayısı', 'Adres', 'Telefon', 'Tip', 'WhatsApp', 'Website', 'Link']
         ws.append(headers)
         
-        # Stil tanımları
         header_font = Font(bold=True, color="FFFFFF")
         header_fill = PatternFill(start_color="4F81BD", end_color="4F81BD", fill_type="solid")
         
-        # Başlık stili uygula
         for cell in ws[1]:
             cell.font = header_font
             cell.fill = header_fill
@@ -404,33 +502,46 @@ def export_data(fmt):
                 item.get('adres'),
                 item.get('telefon'),
                 'Cep' if tel_bilgi.get('is_mobile') else 'Sabit',
-                tel_bilgi.get('whatsapp_link'),
-                item.get('website')
+                tel_bilgi.get('whatsapp_link', ''),
+                item.get('website', ''),
+                item.get('link', '')
             ]
             ws.append(row)
+        
+        # Sütun genişlikleri
+        column_widths = [6, 35, 8, 12, 40, 18, 8, 30, 35, 50]
+        for i, width in enumerate(column_widths, 1):
+            ws.column_dimensions[chr(64 + i)].width = width
             
         output = BytesIO()
         wb.save(output)
         output.seek(0)
         
-        return send_file(output, download_name=f"{filename_base}.xlsx", as_attachment=True)
+        return send_file(
+            output, 
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            download_name=f"{filename_base}.xlsx", 
+            as_attachment=True
+        )
         
     elif fmt == 'csv':
-        # CSV Oluşturma
         output = StringIO()
-        writer = csv.writer(output, delimiter=';') # Excel için noktalı virgül daha iyidir
-        writer.writerow(['Sıra', 'İşletme Adı', 'Puan', 'Yorum Sayısı', 'Adres', 'Telefon', 'WhatsApp', 'Website'])
+        writer = csv.writer(output, delimiter=';')
+        writer.writerow(['Sıra', 'İşletme Adı', 'Puan', 'Yorum Sayısı', 'Adres', 'Telefon', 'Tip', 'WhatsApp', 'Website', 'Link'])
         
         for item in results:
-             writer.writerow([
+            tel_bilgi = item.get('telefon_bilgi', {})
+            writer.writerow([
                 item.get('sira'),
                 item.get('isim'),
                 item.get('puan'),
                 item.get('degerlendirme_sayisi'),
                 item.get('adres'),
                 item.get('telefon'),
-                item.get('telefon_bilgi', {}).get('whatsapp_link', ''),
-                item.get('website')
+                'Cep' if tel_bilgi.get('is_mobile') else 'Sabit',
+                tel_bilgi.get('whatsapp_link', ''),
+                item.get('website', ''),
+                item.get('link', '')
             ])
             
         output.seek(0)
@@ -439,6 +550,13 @@ def export_data(fmt):
             mimetype="text/csv",
             headers={"Content-disposition": f"attachment; filename={filename_base}.csv"}
         )
+    
+    return jsonify({"error": "Geçersiz format"}), 400
 
+
+# --- UYGULAMA BAŞLATMA ---
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Production için debug=False
+    debug_mode = os.getenv('FLASK_ENV', 'production') != 'production'
+    port = int(os.getenv('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=debug_mode, threaded=True)
