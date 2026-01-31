@@ -54,6 +54,7 @@ def start():
 def result():
     return jsonify(results)
 from flask import Flask, render_template, request, jsonify, send_file, Response
+import subprocess
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -504,26 +505,15 @@ def search():
     
     return jsonify({'success': True, 'message': 'Arama başlatıldı!'})
 
-@app.route('/status')
-def status():
-    """Scraping durumunu döner"""
-    return jsonify(scraping_status)
+@app.route('/')
+def home():
+    return "API çalışıyor 👑"
 
-@app.route('/results')
-def get_results():
-    """Sonuçları döner"""
-    return jsonify(scraping_status)
-
-@app.route('/export/excel')
-def export_excel():
-    """Sonuçları Excel (CSV) olarak dışa aktar"""
-    try:
-        # openpyxl kurulu mu kontrol et, değilse CSV olarak export et
-        try:
-            from openpyxl import Workbook
-            from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-            
-            # Son arama sonuçlarını yükle
+# /calistir endpoint'i: app.py'yi subprocess ile başlatır
+@app.route('/calistir')
+def calistir():
+    subprocess.Popen(["python3", "app.py"])  # Arka planda başlatmak için Popen
+    return jsonify({"status": "scraper çalıştı"})
             last_search = load_last_results()
             if not last_search or not last_search.get('sonuclar'):
                 return jsonify({'error': 'Dışa aktarılacak veri bulunamadı!'}), 404
