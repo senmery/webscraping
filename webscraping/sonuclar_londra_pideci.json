@@ -1,0 +1,160 @@
+[
+  {
+    "sira": 1,
+    "isim": "PIDE & CO",
+    "puan": "4,6",
+    "degerlendirme_sayisi": "",
+    "kategori": "Türk restoranı",
+    "adres": "38 Kingsway, London WC2B 6EX, Birleşik Krallık",
+    "telefon": "+44 20 3848 3525",
+    "website": "http://www.pide-co.com/",
+    "calisma_saatleri": {
+      "Perşembe": "11:30–21:00"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 21:00",
+    "plus_code": "GV8J+9C Londra, Birleşik Krallık",
+    "link": "https://www.google.com/maps/place/PIDE+%26+CO/data=!4m7!3m6!1s0x48761b19f4cc6f93:0xac4bb27146d7ce60!8m2!3d51.5159252!4d-0.1189839!16s%2Fg%2F11x7wncxdr!19sChIJk2_M9BkbdkgRYM7XRnGyS6w?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 2,
+    "isim": "Konyalılar Etli Ekmek Fırın Kebap",
+    "puan": "4,2",
+    "degerlendirme_sayisi": "",
+    "kategori": "Pideci",
+    "adres": "Senesenevler Mah, Şemsettin Günaltay Cd. No:33/A, 34742 Kadıköy/İstanbul",
+    "telefon": "(0216) 445 42 42",
+    "website": "https://www.etliekmek.com.tr/",
+    "calisma_saatleri": {
+      "Perşembe": "12:00–21:30"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 12:00",
+    "plus_code": "X36V+G2 Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/Konyal%C4%B1lar+Etli+Ekmek+F%C4%B1r%C4%B1n+Kebap/data=!4m7!3m6!1s0x14cac7a969f170f5:0x26c33aee418feb34!8m2!3d40.9612551!4d29.0925931!16s%2Fg%2F1tf84f5k!19sChIJ9XDxaanHyhQRNOuPQe46wyY?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 3,
+    "isim": "Ustun Lahmacun & Pide Salonu",
+    "puan": "4,7",
+    "degerlendirme_sayisi": "",
+    "kategori": "Türk restoranı",
+    "adres": "107 Green Lanes, Newington Green, London N16 9BX, Birleşik Krallık",
+    "telefon": "+44 20 7704 0360",
+    "website": "",
+    "calisma_saatleri": {
+      "Perşembe": "11:00–22:00"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 22:00",
+    "plus_code": "HW36+Q8 Londra, Birleşik Krallık",
+    "link": "https://www.google.com/maps/place/Ustun+Lahmacun+%26+Pide+Salonu/data=!4m7!3m6!1s0x48761c80d89279b7:0x912df5ba4f33e708!8m2!3d51.554487!4d-0.089166!16s%2Fg%2F1tjjnv_c!19sChIJt3mS2IAcdkgRCOczT7r1LZE?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 4,
+    "isim": "Gaziantep Lahmacun & Pide",
+    "puan": "5,0",
+    "degerlendirme_sayisi": "",
+    "kategori": "Türk restoranı",
+    "adres": "114 Philip Ln, London N15 4JL, Birleşik Krallık",
+    "telefon": "+44 7405 112023",
+    "website": "",
+    "calisma_saatleri": {
+      "Perşembe": "11:30–21:30"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 21:30",
+    "plus_code": "HWQF+QG Londra, Birleşik Krallık",
+    "link": "https://www.google.com/maps/place/Gaziantep+Lahmacun+%26+Pide/data=!4m7!3m6!1s0x48761d1b59f903c3:0x1c6c3354f3a9219a!8m2!3d51.5894981!4d-0.0762107!16s%2Fg%2F11ltg__7tk!19sChIJwwP5WRsddkgRmiGp81QzbBw?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 5,
+    "isim": "BEŞİKTAŞ BAFRA PİDE",
+    "puan": "4,8",
+    "degerlendirme_sayisi": "",
+    "kategori": "Restoran",
+    "adres": "Türkali, Mısırlı Sk. 19-a, 34357 Beşiktaş/İstanbul",
+    "telefon": "0531 341 10 23",
+    "website": "",
+    "calisma_saatleri": {},
+    "calisma_durumu": "",
+    "plus_code": "22W2+FR Beşiktaş, İstanbul",
+    "link": "https://www.google.com/maps/place/BE%C5%9E%C4%B0KTA%C5%9E+BAFRA+P%C4%B0DE/data=!4m7!3m6!1s0x14cab701d539c6f3:0x32180a7bd471cd9d!8m2!3d41.0461733!4d29.0020476!16s%2Fg%2F11khmh58vl!19sChIJ88Y51QG3yhQRnc1x1HsKGDI?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 6,
+    "isim": "Karadeniz pide & lahmacun",
+    "puan": "4,8",
+    "degerlendirme_sayisi": "",
+    "kategori": "Türk restoranı",
+    "adres": "Hertford Rd, Enfield EN3 5JJ, Birleşik Krallık",
+    "telefon": "+44 20 8804 4414",
+    "website": "https://karadenizpide.co.uk/",
+    "calisma_saatleri": {
+      "Perşembe": "08:00–22:00"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 22:00",
+    "plus_code": "MX63+3C Enfield, Birleşik Krallık",
+    "link": "https://www.google.com/maps/place/Karadeniz+pide+%26+lahmacun/data=!4m7!3m6!1s0x48761ff61a0c6a9b:0x7fe04b5c50b784d1!8m2!3d51.6601272!4d-0.0464431!16s%2Fg%2F11sz55p_7l!19sChIJm2oMGvYfdkgR0YS3UFxL4H8?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 7,
+    "isim": "Chef Murad",
+    "puan": "4,4",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kebap Restoranı",
+    "adres": "Balabanağa, Büyük Reşitpaşa Cd No:2/A, 34134 Fatih/İstanbul",
+    "telefon": "(0212) 512 16 18",
+    "website": "http://www.chefmurad.com/home",
+    "calisma_saatleri": {
+      "Perşembe": "07:00–02:00"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 02:00",
+    "plus_code": "2X65+QM Fatih, İstanbul",
+    "link": "https://www.google.com/maps/place/Chef+Murad/data=!4m7!3m6!1s0x14cab98ecde21a79:0xfb701813fc7e1e13!8m2!3d41.0119422!4d28.9591761!16s%2Fg%2F11c2rd5lnc!19sChIJeRrizY65yhQREx5-_BMYcPs?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 8,
+    "isim": "Hayvore Karadeniz Mutfağı",
+    "puan": "4,2",
+    "degerlendirme_sayisi": "",
+    "kategori": "Restoran",
+    "adres": "İstiklal caddesi Turnacıbaşı sok, no4, 34421 Beyoğlu/İstanbul",
+    "telefon": "(0212) 245 75 01",
+    "website": "http://www.hayvore.com.tr/",
+    "calisma_saatleri": {
+      "Perşembe": "08:30–23:00"
+    },
+    "calisma_durumu": "Kapanmak üzere · 23:00 · Açılış zamanı: Cum 08:30",
+    "plus_code": "2XMH+GH Beyoğlu, İstanbul",
+    "link": "https://www.google.com/maps/place/Hayvore+Karadeniz+Mutfa%C4%9F%C4%B1/data=!4m7!3m6!1s0x14cab760fdd293ab:0x89837d01227c8b36!8m2!3d41.0338593!4d28.9788887!16s%2Fg%2F1hc2y3wt8!19sChIJq5PS_WC3yhQRNot8IgF9g4k?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 9,
+    "isim": "Şen Pide Lahmacun",
+    "puan": "4,3",
+    "degerlendirme_sayisi": "",
+    "kategori": "Restoran",
+    "adres": "Silver St., Kendal Parade, London N18 1ND, Birleşik Krallık",
+    "telefon": "+44 20 8807 8799",
+    "website": "http://senpidelahmacun.com/",
+    "calisma_saatleri": {
+      "Perşembe": "12:00–22:00"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 22:00",
+    "plus_code": "JW87+MQ Londra, Birleşik Krallık",
+    "link": "https://www.google.com/maps/place/%C5%9Een+Pide+Lahmacun/data=!4m7!3m6!1s0x48761f3d0da532ef:0x284a1b4f1dec0b8d!8m2!3d51.6167192!4d-0.085541!16s%2Fg%2F11vbp9by7l!19sChIJ7zKlDT0fdkgRjQvsHU8bSig?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 10,
+    "isim": "Tas Pide",
+    "puan": "4,2",
+    "degerlendirme_sayisi": "",
+    "kategori": "Türk restoranı",
+    "adres": "20-22 New Globe Walk, London SE1 9DR, Birleşik Krallık",
+    "telefon": "+44 20 7928 3300",
+    "website": "https://www.tasrestaurants.co.uk/tas-pide",
+    "calisma_saatleri": {
+      "Perşembe": "12:00–23:00"
+    },
+    "calisma_durumu": "Açık · Kapanış saati: 23:00",
+    "plus_code": "GW53+3G Londra, Birleşik Krallık",
+    "link": "https://www.google.com/maps/place/Tas+Pide/data=!4m7!3m6!1s0x487604a9a578a2e7:0x90db777f77bd751a!8m2!3d51.5077067!4d-0.0962043!16s%2Fg%2F1tglmcn0!19sChIJ56J4pakEdkgRGnW9d39325A?authuser=0&hl=tr&rclk=1"
+  }
+]

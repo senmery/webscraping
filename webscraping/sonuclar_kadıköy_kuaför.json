@@ -1,0 +1,220 @@
+[
+  {
+    "sira": 1,
+    "isim": "Cosmos Barber By Serdar Çetin",
+    "puan": "5,0",
+    "degerlendirme_sayisi": "",
+    "kategori": "Berber Dükkanı",
+    "adres": "Emin Ali Paşa Cad, Çağlar Sk. No: 11/C, 34744 Kadıköy/İstanbul",
+    "telefon": "0532 460 45 41",
+    "telefon_bilgi": {
+      "is_mobile": true,
+      "formatted": "05324604541",
+      "whatsapp_link": "https://wa.me/905324604541",
+      "display": "0532 460 45 41"
+    },
+    "website": "http://cosmosbarber.com/",
+    "calisma_saatleri": {
+      "Perşembe": "09:00–21:00"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 09:00",
+    "plus_code": "X35V+G8 Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/Cosmos+Barber+By+Serdar+%C3%87etin/data=!4m7!3m6!1s0x14cac7b463bb9a89:0xa07c120316e354f3!8m2!3d40.958765!4d29.093283!16s%2Fg%2F11zk24k5n3!19sChIJiZq7Y7THyhQR81TjFgMSfKA?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 2,
+    "isim": "Cihan Ünal Berber",
+    "puan": "4,8",
+    "degerlendirme_sayisi": "",
+    "kategori": "Berber Dükkanı",
+    "adres": "Erenköy, Telli Kavak Sk. No:43, 34738 Kadıköy/İstanbul",
+    "telefon": "0506 181 71 31",
+    "telefon_bilgi": {
+      "is_mobile": true,
+      "formatted": "05061817131",
+      "whatsapp_link": "https://wa.me/905061817131",
+      "display": "0506 181 71 31"
+    },
+    "website": "http://www.cihanunalberber.com/",
+    "calisma_saatleri": {
+      "Perşembe": "09:30–20:30"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 09:30",
+    "plus_code": "X39M+Q2 Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/Cihan+%C3%9Cnal+Berber/data=!4m7!3m6!1s0x14cac7a8c11875dd:0x8c92699a7a2e2d71!8m2!3d40.969441!4d29.082562!16s%2Fg%2F11fx8br4sq!19sChIJ3XUYwajHyhQRcS0uepppkow?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 3,
+    "isim": "PROTEZ TIRNAK KADIKÖY KUAFÖR",
+    "puan": "4,5",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "Erenköy, Yesari Asım Arsoy Sk. No:14, 34738 Kadıköy/İstanbul",
+    "telefon": "0530 742 20 34",
+    "telefon_bilgi": {
+      "is_mobile": true,
+      "formatted": "05307422034",
+      "whatsapp_link": "https://wa.me/905307422034",
+      "display": "0530 742 20 34"
+    },
+    "website": "https://www.instagram.com/efloranailstudio/",
+    "calisma_saatleri": {
+      "Perşembe": "09:00–23:00"
+    },
+    "calisma_durumu": "Kapanmak üzere · 23:00 · Açılış zamanı: Cum 09:00",
+    "plus_code": "X3FG+QR Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/PROTEZ+TIRNAK+KADIK%C3%96Y+KUAF%C3%96R/data=!4m7!3m6!1s0x14cac7f495c5ddb3:0xfc1369b2f5395e9!8m2!3d40.9744509!4d29.0771002!16s%2Fg%2F11jt1s1q9w!19sChIJs93FlfTHyhQR6ZVTL5s2wQ8?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 4,
+    "isim": "KUAFÖR MELİH UZUN",
+    "puan": "4,9",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "Kozyatağı, Kaya Sultan Sokağı No:69, 34742 Kadıköy/İstanbul",
+    "telefon": "(0216) 384 99 80",
+    "telefon_bilgi": {
+      "is_mobile": false,
+      "formatted": "02163849980",
+      "whatsapp_link": "",
+      "display": "(0216) 384 99 80"
+    },
+    "website": "",
+    "calisma_saatleri": {
+      "Perşembe": "09:00–20:00"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 09:00",
+    "plus_code": "X39W+8R Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/KUAF%C3%96R+MEL%C4%B0H+UZUN/data=!4m7!3m6!1s0x14cac65117c9d54b:0x2069263b8a6319f3!8m2!3d40.9683683!4d29.0970445!16s%2Fg%2F11c433j4q8!19sChIJS9XJF1HGyhQR8xljijsmaSA?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 5,
+    "isim": "Arzu Kuaför",
+    "puan": "4,8",
+    "degerlendirme_sayisi": "",
+    "kategori": "Güzellik Salonu",
+    "adres": "Kozyatağı, Bayar Cad./şehit Meltem Özkılıç Sok. Kral Apt. No:4, 34742 Kadıköy/İstanbul",
+    "telefon": "(0216) 416 62 20",
+    "telefon_bilgi": {
+      "is_mobile": false,
+      "formatted": "02164166220",
+      "whatsapp_link": "",
+      "display": "(0216) 416 62 20"
+    },
+    "website": "",
+    "calisma_saatleri": {},
+    "calisma_durumu": "",
+    "plus_code": "X3CW+HF Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/Arzu+Kuaf%C3%B6r/data=!4m7!3m6!1s0x14cac6527a2beddf:0x80ca131a39932d25!8m2!3d40.971484!4d29.0961282!16s%2Fg%2F1hc0_0l13!19sChIJ3-0relLGyhQRJS2TORoTyoA?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 6,
+    "isim": "THE RISE HAİR LOUNGE",
+    "puan": "4,8",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "develi apartmanı, Merdivenköy, Fahrettin Kerim Gökay Cd No:199, 34744 Kadıköy/İstanbul",
+    "telefon": "(0216) 566 20 50",
+    "telefon_bilgi": {
+      "is_mobile": false,
+      "formatted": "02165662050",
+      "whatsapp_link": "",
+      "display": "(0216) 566 20 50"
+    },
+    "website": "https://www.therisehairlounge.com/",
+    "calisma_saatleri": {
+      "Perşembe": "09:00–20:00"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 09:00",
+    "plus_code": "X3M7+89 Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/THE+RISE+HA%C4%B0R+LOUNGE/data=!4m7!3m6!1s0x14cac796c3503a35:0x83c4a6ae0790939d!8m2!3d40.9833616!4d29.0633801!16s%2Fg%2F1tcy1bh3!19sChIJNTpQw5bHyhQRnZOQB66mxIM?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 7,
+    "isim": "Hit Hair Design - Halil İbrahim Topal",
+    "puan": "4,9",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "Hacımuhtar sokak kavi aprt no.2 dükkan4, 34742 Kadıköy",
+    "telefon": "(0216) 410 01 26",
+    "telefon_bilgi": {
+      "is_mobile": false,
+      "formatted": "02164100126",
+      "whatsapp_link": "",
+      "display": "(0216) 410 01 26"
+    },
+    "website": "",
+    "calisma_saatleri": {
+      "Perşembe": "08:30–19:30"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 08:30",
+    "plus_code": "X38W+59 Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/Hit+Hair+Design+-+Halil+%C4%B0brahim+Topal/data=!4m7!3m6!1s0x14cac7fc802018bf:0x42011199cf3a7c77!8m2!3d40.9654176!4d29.0959281!16s%2Fg%2F11gjs8kdlq!19sChIJvxgggPzHyhQRd3w6z5kRAUI?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 8,
+    "isim": "The Change Hair Design Studio",
+    "puan": "4,9",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "Erenköy, Ethemefendi Caddesi Menekşe Apt D:56 /16, 34728 Kadıköy/İstanbul",
+    "telefon": "(0216) 766 12 17",
+    "telefon_bilgi": {
+      "is_mobile": false,
+      "formatted": "02167661217",
+      "whatsapp_link": "",
+      "display": "(0216) 766 12 17"
+    },
+    "website": "https://thechangehairdesign.com/",
+    "calisma_saatleri": {
+      "Perşembe": "09:00–19:00"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 09:00",
+    "plus_code": "X3CF+XM Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/The+Change+Hair+Design+Studio/data=!4m7!3m6!1s0x14cac7a82ffa4599:0x1cd5618b3398db2e!8m2!3d40.9724739!4d29.0741857!16s%2Fg%2F11k9y28p6l!19sChIJmUX6L6jHyhQRLtuYM4th1Rw?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 9,
+    "isim": "Uğurkan Kuaför",
+    "puan": "4,9",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "Merdivenköy, Fahrettin Kerim Gökay Cd No:165/B, 34732 Kadıköy/İstanbul",
+    "telefon": "0532 660 30 30",
+    "telefon_bilgi": {
+      "is_mobile": true,
+      "formatted": "05326603030",
+      "whatsapp_link": "https://wa.me/905326603030",
+      "display": "0532 660 30 30"
+    },
+    "website": "https://www.ugurkankuafor.com/",
+    "calisma_saatleri": {
+      "Perşembe": "08:00–20:30"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 08:00",
+    "plus_code": "X3M5+MP Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/U%C4%9Furkan+Kuaf%C3%B6r/data=!4m7!3m6!1s0x14cac791b11fbd11:0xddeea9298952e307!8m2!3d40.9842071!4d29.0593718!16s%2Fg%2F1tjry2c_!19sChIJEb0fsZHHyhQRB-NSiSmp7t0?authuser=0&hl=tr&rclk=1"
+  },
+  {
+    "sira": 10,
+    "isim": "Cadde Saç Tasarım Kozyatagı Kuafor",
+    "puan": "5,0",
+    "degerlendirme_sayisi": "",
+    "kategori": "Kuaför",
+    "adres": "Kozyatağı, Sıtma Pınar Sk. No:15 D:1A, 34742 Kadıköy/İstanbul",
+    "telefon": "(0216) 445 64 06",
+    "telefon_bilgi": {
+      "is_mobile": false,
+      "formatted": "02164456406",
+      "whatsapp_link": "",
+      "display": "(0216) 445 64 06"
+    },
+    "website": "http://www.caddesactasarim.com/",
+    "calisma_saatleri": {
+      "Perşembe": "07:00–22:00"
+    },
+    "calisma_durumu": "Kapalı ⋅ Açılış zamanı: Cum 07:00",
+    "plus_code": "X39X+MP Kadıköy, İstanbul",
+    "link": "https://www.google.com/maps/place/Cadde+Sa%C3%A7+Tasar%C4%B1m+Kozyatag%C4%B1+Kuafor/data=!4m7!3m6!1s0x14cac651930e2667:0x1d046c4bb0996d67!8m2!3d40.9691389!4d29.0993272!16s%2Fg%2F11c4bd5nnd!19sChIJZyYOk1HGyhQRZ22ZsEtsBB0?authuser=0&hl=tr&rclk=1"
+  }
+]
