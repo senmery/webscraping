@@ -1,4 +1,6 @@
-﻿from selenium import webdriver
+﻿
+# Selenium ve ChromeDriver ayarları (Ubuntu uyumlu)
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,24 +11,35 @@ import json
 import csv
 
 def scrape_google_maps(url):
-    """Google Maps'ten berber verilerini çeker"""
-    
+    """
+    Google Maps'ten berber verilerini çeker.
+    Ubuntu sunucuda Chrome ve ChromeDriver'ın sistemde kurulu olduğu varsayılır.
+    Headless mod ve stabil çalışma için ek argümanlar eklenmiştir.
+    """
     # Chrome ayarları
     chrome_options = Options()
     chrome_options.add_argument("--start-maximized")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_argument("--lang=tr-TR")
-    # chrome_options.add_argument("--headless")  # Arka planda çalıştırmak için açın
-    
-    driver = webdriver.Chrome(options=chrome_options)
-    
+    # Headless ve sunucu uyumlu argümanlar
+    chrome_options.add_argument('--headless=new')  # Headless mod (Selenium 4+)
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--disable-gpu')
+
+    # ChromeDriver'ın sistemde kurulu olduğu yol
+    chrome_service = Service('/usr/local/bin/chromedriver')
+
+    # Webdriver başlatılır
+    driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
+
     try:
         print("Google Maps açılıyor...")
         driver.get(url)
-        
+
         # Sayfanın yüklenmesini bekle
         time.sleep(5)
-        
+
         # Çerez popup'ını kabul et (varsa)
         try:
             accept_button = WebDriverWait(driver, 5).until(
@@ -34,9 +47,9 @@ def scrape_google_maps(url):
             )
             accept_button.click()
             time.sleep(2)
-        except:
+        except Exception:
             print("Çerez popup'ı bulunamadı veya zaten kabul edilmiş.")
-        
+
         # Sonuçların yüklenmesini bekle
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "div[role='feed']"))
