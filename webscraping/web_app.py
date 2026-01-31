@@ -72,6 +72,7 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'google_maps_scraper_2026')
+application = app  # WSGI sunucuları için
 
 # Global değişkenler - scraping durumu için
 scraping_status = {
