@@ -1,4 +1,59 @@
-﻿from flask import Flask, render_template, request, jsonify, send_file, Response
+﻿import threading
+
+# Basit polling arayüzü için global sonuç cache'i
+results = {}
+
+# Arka planda scraping başlatan fonksiyon (örnek Maltepe Berberler için)
+def scrape_background():
+    global results
+    from app import scrape_google_maps  # app.py'den fonksiyon import
+    url = "https://www.google.com/maps/search/maltepe+berberler/"  # Buraya gerçek Google Maps arama URL'si
+    try:
+        data = scrape_google_maps(url)
+        results['data'] = data
+        results['status'] = 'Hazır!'
+    except Exception as e:
+        results['data'] = []
+        results['status'] = f'Hata: {e}'
+
+# Ana sayfa: buton ve polling scripti
+@app.route('/')
+def home():
+    return '''
+    <h1>Maltepe Berberler Scraping</h1>
+    <button onclick="startScrape()">Başlat</button>
+    <div id="status"></div>
+    <pre id="results"></pre>
+    <script>
+    function startScrape() {
+        fetch('/start').then(r=>r.text()).then(t=>document.getElementById('status').innerText=t);
+        setInterval(checkResult, 2000);
+    }
+    function checkResult() {
+        fetch('/result').then(r=>r.json()).then(d=> {
+            document.getElementById('results').innerText=JSON.stringify(d, null, 2);
+            document.getElementById('status').innerText=d.status || 'Çalışıyor...';
+        });
+    }
+    </script>
+    '''
+
+# Scraping başlatma endpointi
+@app.route('/start')
+def start():
+    if 'thread' not in globals() or not globals()['thread'].is_alive():
+        global thread
+        thread = threading.Thread(target=scrape_background)
+        thread.start()
+        return 'Scraping başladı! Bekleyin...'
+    else:
+        return 'Zaten çalışıyor, lütfen bekleyin.'
+
+# Sonuçları dönen endpoint
+@app.route('/result')
+def result():
+    return jsonify(results)
+from flask import Flask, render_template, request, jsonify, send_file, Response
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
