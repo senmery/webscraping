@@ -13,8 +13,10 @@ import re
 import csv
 from io import StringIO, BytesIO
 
+from dotenv import load_dotenv
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = 'google_maps_scraper_2026'
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'google_maps_scraper_2026')
 
 # Global değişkenler - scraping durumu için
 scraping_status = {
@@ -603,4 +605,6 @@ def export_excel():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
+    debug = os.getenv('FLASK_ENV', 'production') != 'production'
+    port = int(os.getenv('PORT', 5000))
+    app.run(debug=debug, host='0.0.0.0', port=port, threaded=True)
