@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service  # ChromeDriver servisi için
 import time
 import json
 import csv
@@ -21,14 +21,16 @@ def scrape_google_maps(url):
     chrome_options.add_argument("--start-maximized")
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")
     chrome_options.add_argument("--lang=tr-TR")
-    # Headless ve sunucu uyumlu argümanlar
-    chrome_options.add_argument('--headless=new')  # Headless mod (Selenium 4+)
+
+    # Headless ve sunucu uyumlu argümanlar (Linux için tam set)
+    chrome_options.add_argument('--headless=new')
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--remote-debugging-port=9222')
 
-    # ChromeDriver'ın sistemde kurulu olduğu yol
-    chrome_service = Service('/usr/local/bin/chromedriver')
+    # ChromeDriver'ın sistemde kurulu olduğu doğru yol
+    chrome_service = Service('/usr/bin/chromedriver')
 
     # Webdriver başlatılır
     driver = webdriver.Chrome(service=chrome_service, options=chrome_options)
